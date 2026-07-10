@@ -8,7 +8,9 @@ RUN apt-get update && \
       git \
       curl \
       wget \
-      unzip && \
+      unzip \
+      nodejs \
+      npm && \
     apt-get clean && \
     groupadd -f docker && \
     usermod -aG docker jenkins
