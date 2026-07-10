@@ -23,6 +23,16 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                dir('app') {
+                    sh '''
+                        npm ci
+                    '''
+                }
+            }
+        }
+
         stage('Unit Tests') {
             steps {
                 dir('app') {
