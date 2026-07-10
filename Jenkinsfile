@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "enterprise-devsecops-api"
-        IMAGE_TAG = "v1"
-    }
-
     stages {
 
         stage('Checkout') {
@@ -14,59 +9,46 @@ pipeline {
             }
         }
 
-        stage('Verify Tools') {
-            steps {
-                sh '''
-                    docker --version
-                    git --version
-                '''
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 dir('app') {
-                    sh '''
-                        npm ci
-                    '''
+                    sh 'npm install'
                 }
             }
         }
 
-        stage('Unit Tests') {
+        stage('Run Tests') {
             steps {
                 dir('app') {
-                    sh '''
-                        npm test
-                    '''
+                    sh 'npm test'
                 }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                dir('app') {
-                    sh '''
-                        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-                    '''
-                }
+                sh 'docker build -t enterprise-devsecops-api:v1 ./app'
             }
         }
 
-        stage('List Images') {
+        stage('SAST - Semgrep') {
             steps {
-                sh 'docker images'
+                sh '''
+                mkdir -p reports
+
+                semgrep \
+                  --config semgrep/rules.yml \
+                  --json \
+                  --output reports/semgrep-report.json \
+                  app/
+                '''
             }
         }
     }
 
     post {
-        success {
-            echo 'Build Successful'
-        }
-
-        failure {
-            echo 'Build Failed'
+        always {
+            archiveArtifacts artifacts: 'reports/*', fingerprint: true
         }
     }
 }
