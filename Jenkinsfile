@@ -23,6 +23,16 @@ pipeline {
             }
         }
 
+        stage('Unit Tests') {
+            steps {
+                dir('app') {
+                    sh '''
+                        npm test
+                    '''
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 dir('app') {
