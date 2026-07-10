@@ -1,3 +1,5 @@
+const pool = require("../database/db");
+
 exports.home = (req, res) => {
   res.status(200).json({
     application: "Enterprise DevSecOps Zero Downtime Pipeline",
@@ -24,4 +26,24 @@ exports.live = (req, res) => {
   res.status(200).json({
     alive: true
   });
+};
+
+exports.database = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+
+    res.json({
+      status: "UP",
+      database: "Connected",
+      time: result.rows[0].now
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      status: "DOWN",
+      error: err.message
+    });
+
+  }
 };

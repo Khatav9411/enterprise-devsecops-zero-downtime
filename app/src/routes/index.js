@@ -1,16 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const healthRoute = require("./health");
+const healthRoutes = require("./health.routes");
+const userRoutes = require("./user.routes");
+const productRoutes = require("./product.routes");
+const orderRoutes = require("./order.routes");
 
-router.use("/health/db", healthRoute);
-
-router.get("/", (req, res) => {
-  res.json({
-    application: "Enterprise DevSecOps Zero Downtime Pipeline",
-    version: "1.0.0",
-    status: "Running",
-  });
-});
+router.use("/", healthRoutes);
+router.use("/users", userRoutes);
+router.use("/products", productRoutes);
+router.use("/orders", orderRoutes);
 
 module.exports = router;
