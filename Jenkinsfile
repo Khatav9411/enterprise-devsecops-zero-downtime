@@ -44,6 +44,20 @@ pipeline {
                 '''
             }
         }
+
+        stage('Dependency Scan - Trivy') {
+            steps {
+                sh '''
+                mkdir -p reports
+
+                trivy fs \
+                    --scanners vuln \
+                    --format json \
+                    --output reports/trivy-dependency-report.json \
+                    app
+                '''
+            }
+        }
     }
 
     post {
