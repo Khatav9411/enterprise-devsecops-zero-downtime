@@ -73,6 +73,23 @@ pipeline {
                 '''
             }
         }
+
+        stage('DAST - OWASP ZAP') {
+            steps {
+                sh '''
+                mkdir -p reports
+
+                docker run --rm \
+                    --network host \
+                    -v $(pwd)/reports:/zap/wrk \
+                    ghcr.io/zaproxy/zaproxy:stable \
+                    zap-baseline.py \
+                    -t http://host.docker.internal:3000 \
+                    -r zap-report.html
+                '''
+            }
+        }
+
     }
 
     post {
