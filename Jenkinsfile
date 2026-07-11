@@ -31,6 +31,21 @@ pipeline {
             }
         }
 
+        stage('Container Image Scan - Trivy') {
+            steps {
+                sh '''
+                mkdir -p reports
+
+                trivy image \
+                    --severity HIGH,CRITICAL \
+                    --format table \
+                    --output reports/trivy-image-report.txt \
+                    enterprise-devsecops-api:v1
+                '''
+            }
+        }
+
+
         stage('SAST - Semgrep') {
             steps {
                 sh '''
