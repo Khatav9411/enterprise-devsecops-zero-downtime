@@ -96,7 +96,7 @@ pipeline {
                     -t http://host.docker.internal:3000 \
                     -r zap-report.html
 
-                docker rm -f enterprise-api-test
+                docker rm -f enterprise-api-test || true
                 '''
             }
         }
