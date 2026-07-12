@@ -79,6 +79,15 @@ pipeline {
                 sh '''
                 mkdir -p reports
 
+                docker rm -f enterprise-api-test || true
+
+                docker run -d \
+                    --name enterprise-api-test \
+                    -p 3000:3000 \
+                    enterprise-devsecops-api:v1
+
+                sleep 15
+
                 docker run --rm \
                     --network host \
                     -v $(pwd)/reports:/zap/wrk \
@@ -86,6 +95,8 @@ pipeline {
                     zap-baseline.py \
                     -t http://host.docker.internal:3000 \
                     -r zap-report.html
+
+                docker rm -f enterprise-api-test
                 '''
             }
         }
