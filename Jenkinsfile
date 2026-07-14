@@ -78,8 +78,10 @@ pipeline {
             steps {
                 sh '''
                 mkdir -p reports
+                chmod -R 777 reports
 
                 docker run --rm \
+                    --user root \
                     --network host \
                     -v $(pwd)/reports:/zap/wrk \
                     ghcr.io/zaproxy/zaproxy:stable \
