@@ -1,0 +1,16 @@
+config:
+  clients:
+    - url: http://loki-gateway.logging.svc.cluster.local/loki/api/v1/push
+
+  snippets:
+    pipelineStages:
+      - docker: {}
+
+daemonset:
+  enabled: true
+
+deployment:
+  enabled: false
+
+serviceMonitor:
+  enabled: true

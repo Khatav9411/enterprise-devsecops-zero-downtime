@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+metadata:
+  name: enterprise-api
+
+spec:
+  replicas: 2
+
+  strategy:
+    blueGreen:
+      activeService: enterprise-api-active
+      previewService: enterprise-api-preview
+      autoPromotionEnabled: false
+
+  selector:
+    matchLabels:
+      app: enterprise-api
+
+  template:
+    metadata:
+      labels:
+        app: enterprise-api
+
+    spec:
+      containers:
+      - name: enterprise-api
+
+        image: kamleshcloud/enterprise-devsecops-api:v1
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 3000
