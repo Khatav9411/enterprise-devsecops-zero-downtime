@@ -26,7 +26,7 @@ spec:
       containers:
       - name: enterprise-api
 
-        image: kamleshcloud/enterprise-devsecops-api:v1
+        image: kamleshcloud/enterprise-devsecops-api:v2
 
         imagePullPolicy: Always
 
